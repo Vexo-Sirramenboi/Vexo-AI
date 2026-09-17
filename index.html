@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VEXO AI</title>
+<meta name="description" content="VEXO AI powered by Ollama.">
+<style>
+:root{
+  --bg:#06090f;--bg2:#0a0f1c;--card:#0e1626;--line:rgba(148,163,184,.12);
+  --text:#e8eefb;--muted:#8a97b5;--accent:#7c5cff;--accent2:#19d3ff;
+  --grad:linear-gradient(135deg,#7c5cff,#4c8dff 55%,#19d3ff);
+  --danger:#fb7185;--green:#34d399;--r:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}
+body{overflow-x:hidden}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+#bg{position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(circle at 15% 15%,rgba(124,92,255,.20),transparent 30%),
+  radial-gradient(circle at 90% 30%,rgba(25,211,255,.16),transparent 28%),
+  linear-gradient(135deg,#050711,#0a0f1c 55%,#060812)}
+#grid{position:fixed;inset:-20%;z-index:-1;opacity:.28;background-image:
+  linear-gradient(rgba(124,92,255,.10) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(25,211,255,.08) 1px,transparent 1px);
+  background-size:48px 48px;transform:perspective(700px) rotateX(58deg) translateY(18%);}
+.shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+.app{width:min(1100px,100%);height:min(820px,calc(100vh - 44px));min-height:620px;display:grid;grid-template-rows:auto 1fr auto;background:rgba(10,15,28,.82);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.45);backdrop-filter:blur(22px)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.025)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:40px;height:40px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-weight:900;font-size:18px;box-shadow:0 0 28px rgba(124,92,255,.45)}
+.brand h1{margin:0;font-size:18px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.header-actions{display:flex;align-items:center;gap:8px}.btn{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);color:var(--text);padding:8px 12px;font-size:12px;font-weight:700}.btn:hover{border-color:rgba(124,92,255,.5);background:rgba(124,92,255,.08)}.btn.primary{border:0;background:var(--grad);color:#fff}
+.chat{min-height:0;overflow:auto;padding:22px}.messages{display:grid;gap:16px;max-width:900px;margin:0 auto}.msg{display:flex;gap:11px;align-items:flex-start}.msg.user{justify-content:flex-end}.avatar{width:34px;height:34px;flex:none;border-radius:11px;background:rgba(124,92,255,.16);display:grid;place-items:center;font-size:12px;font-weight:800}.msg.user .avatar{background:var(--grad);order:2}.bubble-wrap{max-width:min(78%,760px)}.name{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:0 0 5px 3px}.msg.user .name{text-align:right;margin-right:3px}.bubble{padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035);line-height:1.6;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.msg.user .bubble{background:linear-gradient(135deg,rgba(124,92,255,.20),rgba(25,211,255,.08));border-color:rgba(124,92,255,.28)}
+.code{margin:10px 0 0;padding:12px;border-radius:11px;background:#050812;border:1px solid var(--line);overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;white-space:pre}
+.copy{margin-top:7px;font-size:10px;padding:5px 8px}
+.empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);padding:30px}.empty strong{display:block;color:var(--text);font-size:25px;margin-bottom:8px}.empty p{max-width:500px;margin:0;line-height:1.6}
+.typing{display:inline-flex;align-items:center;gap:4px}.typing i{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:b 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes b{50%{opacity:.2;transform:translateY(-2px)}}
+.composer{padding:14px 18px;border-top:1px solid var(--line);background:rgba(255,255,255,.02)}.composer-inner{display:flex;gap:9px;align-items:flex-end;max-width:900px;margin:0 auto}.input{flex:1;min-height:48px;max-height:150px;resize:vertical;border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.25);color:var(--text);padding:13px;outline:none}.input:focus{border-color:rgba(124,92,255,.65);box-shadow:0 0 0 3px rgba(124,92,255,.10)}.send{height:48px;min-width:78px}
+.notice{max-width:900px;margin:0 auto 8px;color:var(--muted);font-size:10px;line-height:1.4;text-align:center}.notice b{color:#b8c3dd}
+@media(max-width:700px){.shell{padding:0}.app{height:100vh;min-height:100vh;border-radius:0;border-left:0;border-right:0}.bubble-wrap{max-width:86%}.header{padding:14px}.chat{padding:15px}.composer{padding:12px}.header-actions .btn.secondary{display:none}}
+</style>
+</head>
+<body>
+<div id="bg"></div><div id="grid"></div>
+<div class="shell">
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">V</div>
+        <div><h1>VEXO AI</h1><small>Ollama-powered assistant</small></div>
+      </div>
+      <div class="header-actions">
+        <button class="btn secondary" id="newChatBtn">New Chat</button>
+        <button class="btn" id="clearBtn">Clear</button>
+      </div>
+    </header>
+
+    <main class="chat" id="chat">
+      <div id="messages" class="messages"></div>
+    </main>
+
+    <footer class="composer">
+      <div class="notice">Model: <b>huihui_ai/gemma-4-abliterated:latest</b> · Responses are generated by an external Ollama server.</div>
+      <div class="composer-inner">
+        <textarea id="prompt" class="input" rows="1" placeholder="Ask VEXO AI something..."></textarea>
+        <button id="sendBtn" class="btn primary send">Send</button>
+      </div>
+    </footer>
+  </div>
+</div>
+<script>
+const API_URL = "https://jxxjvwemjvhrozuaihso.supabase.co/functions/v1/vexo-ai";
+const MODEL = "huihui_ai/gemma-4-abliterated:latest";
+const STORAGE_KEY = "vexo-ai-history-v1";
+let history = [];
+
+const $ = id => document.getElementById(id);
+function esc(v){return String(v ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(history.slice(-30)))}catch(e){}}
+function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");if(Array.isArray(x))history=x}catch(e){history=[]}}
+function copyText(text){navigator.clipboard?.writeText(text).catch(()=>{});}
+function renderText(text){
+  const safe=esc(text);
+  const parts=safe.split(/(```[\s\S]*?```)/g);
+  return parts.map(part=>{
+    if(part.startsWith("```")&&part.endsWith("```")){
+      const inner=part.slice(3,-3).replace(/^\w+\n/,"");
+      return `<div class="code">${inner}</div><button class="btn copy" data-copy="${encodeURIComponent(inner)}">Copy code</button>`;
+    }
+    return part;
+  }).join("");
+}
+function render(){
+  const box=$("messages");
+  if(!history.length){
+    box.innerHTML=`<div class="empty"><div><strong>VEXO AI</strong><p>Ask a coding question, get an explanation, brainstorm an idea, or work through a problem.</p></div></div>`;
+    return;
+  }
+  box.innerHTML=history.map((m,i)=>`<div class="msg ${m.role==='user'?'user':''}">
+    <div class="avatar">${m.role==='user'?'U':'V'}</div>
+    <div class="bubble-wrap"><div class="name">${m.role==='user'?'You':'VEXO AI'}</div><div class="bubble">${renderText(m.content)}</div></div>
+  </div>`).join("");
+  $("chat").scrollTop=$("chat").scrollHeight;
+  document.querySelectorAll("[data-copy]").forEach(btn=>btn.addEventListener("click",()=>{copyText(decodeURIComponent(btn.dataset.copy));btn.textContent="Copied";setTimeout(()=>btn.textContent="Copy code",900)}));
+}
+function add(role,content){history.push({role,content});save();render();}
+function showTyping(){const box=$("messages");box.insertAdjacentHTML("beforeend",`<div id="typing" class="msg"><div class="avatar">V</div><div class="bubble-wrap"><div class="name">VEXO AI</div><div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div></div>`);$("chat").scrollTop=$("chat").scrollHeight;}
+function removeTyping(){$("typing")?.remove()}
+async function ask(){
+  const input=$("prompt");const text=input.value.trim();if(!text)return;
+  input.value="";input.style.height="48px";add("user",text);showTyping();
+  $("sendBtn").disabled=true;
+  try{
+    const response=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:MODEL,messages:history.filter(x=>x.role==='user'||x.role==='assistant').slice(-20)})});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data?.error||`Request failed (${response.status})`);
+    removeTyping();add("assistant",String(data?.message?.content||data?.response||"No response was returned."));
+  }catch(err){
+    removeTyping();add("assistant",`I couldn't reach the VEXO AI service.\n\n${err?.message||"Unknown error"}`);
+  }finally{$("sendBtn").disabled=false;input.focus()}
+}
+$("sendBtn").addEventListener("click",ask);
+$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask()}});
+$("prompt").addEventListener("input",e=>{e.target.style.height="48px";e.target.style.height=Math.min(e.target.scrollHeight,150)+"px"});
+$("clearBtn").addEventListener("click",()=>{history=[];save();render();});
+$("newChatBtn").addEventListener("click",()=>{history=[];save();render();$("prompt").focus()});
+window.addEventListener("message",event=>{
+  if(event.data?.type==="VEXO_THEME"&&event.data?.accent)document.documentElement.style.setProperty("--accent",String(event.data.accent));
+});
+load();render();
+</script>
+</body>
+</html>
