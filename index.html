@@ -2,57 +2,167 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06090f">
+<meta name="description" content="VEXO AI — a modern AI assistant powered by Ollama Cloud.">
 <title>VEXO AI</title>
-<meta name="description" content="VEXO AI powered by Ollama.">
 <style>
 :root{
-  --bg:#06090f;--bg2:#0a0f1c;--card:#0e1626;--line:rgba(148,163,184,.12);
-  --text:#e8eefb;--muted:#8a97b5;--accent:#7c5cff;--accent2:#19d3ff;
-  --grad:linear-gradient(135deg,#7c5cff,#4c8dff 55%,#19d3ff);
-  --danger:#fb7185;--green:#34d399;--r:18px;
+  --bg:#06090f;
+  --bg2:#0a0f1c;
+  --panel:rgba(12,18,32,.82);
+  --panel-2:rgba(18,26,44,.86);
+  --surface:rgba(255,255,255,.045);
+  --surface-hover:rgba(255,255,255,.07);
+  --line:rgba(148,163,184,.13);
+  --line-strong:rgba(148,163,184,.22);
+  --text:#edf3ff;
+  --muted:#8e9bb8;
+  --muted-2:#68758f;
+  --accent:#7c5cff;
+  --accent2:#19d3ff;
+  --accent3:#ff3f9d;
+  --green:#34d399;
+  --danger:#fb7185;
+  --shadow:0 30px 90px rgba(0,0,0,.52);
+  --radius:20px;
+  --sidebar:260px;
+  --content:980px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}
-body{overflow-x:hidden}
+html,body{width:100%;height:100%;margin:0}
+html{background:var(--bg)}
+body{
+  overflow:hidden;
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 12% 10%,rgba(124,92,255,.16),transparent 28%),
+    radial-gradient(circle at 92% 12%,rgba(25,211,255,.11),transparent 24%),
+    radial-gradient(circle at 70% 100%,rgba(255,63,157,.08),transparent 22%),
+    linear-gradient(135deg,#050711,#090f1d 56%,#060810);
+}
 button,input,textarea{font:inherit}
-button{cursor:pointer}
-#bg{position:fixed;inset:0;z-index:-2;background:
-  radial-gradient(circle at 15% 15%,rgba(124,92,255,.20),transparent 30%),
-  radial-gradient(circle at 90% 30%,rgba(25,211,255,.16),transparent 28%),
-  linear-gradient(135deg,#050711,#0a0f1c 55%,#060812)}
-#grid{position:fixed;inset:-20%;z-index:-1;opacity:.28;background-image:
-  linear-gradient(rgba(124,92,255,.10) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(25,211,255,.08) 1px,transparent 1px);
-  background-size:48px 48px;transform:perspective(700px) rotateX(58deg) translateY(18%);}
-.shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
-.app{width:min(1100px,100%);height:min(820px,calc(100vh - 44px));min-height:620px;display:grid;grid-template-rows:auto 1fr auto;background:rgba(10,15,28,.82);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.45);backdrop-filter:blur(22px)}
-.header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.025)}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:40px;height:40px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-weight:900;font-size:18px;box-shadow:0 0 28px rgba(124,92,255,.45)}
-.brand h1{margin:0;font-size:18px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.header-actions{display:flex;align-items:center;gap:8px}.btn{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);color:var(--text);padding:8px 12px;font-size:12px;font-weight:700}.btn:hover{border-color:rgba(124,92,255,.5);background:rgba(124,92,255,.08)}.btn.primary{border:0;background:var(--grad);color:#fff}
-.chat{min-height:0;overflow:auto;padding:22px}.messages{display:grid;gap:16px;max-width:900px;margin:0 auto}.msg{display:flex;gap:11px;align-items:flex-start}.msg.user{justify-content:flex-end}.avatar{width:34px;height:34px;flex:none;border-radius:11px;background:rgba(124,92,255,.16);display:grid;place-items:center;font-size:12px;font-weight:800}.msg.user .avatar{background:var(--grad);order:2}.bubble-wrap{max-width:min(78%,760px)}.name{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:0 0 5px 3px}.msg.user .name{text-align:right;margin-right:3px}.bubble{padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035);line-height:1.6;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.msg.user .bubble{background:linear-gradient(135deg,rgba(124,92,255,.20),rgba(25,211,255,.08));border-color:rgba(124,92,255,.28)}
-.code{margin:10px 0 0;padding:12px;border-radius:11px;background:#050812;border:1px solid var(--line);overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;white-space:pre}
-.copy{margin-top:7px;font-size:10px;padding:5px 8px}
-.empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);padding:30px}.empty strong{display:block;color:var(--text);font-size:25px;margin-bottom:8px}.empty p{max-width:500px;margin:0;line-height:1.6}
-.typing{display:inline-flex;align-items:center;gap:4px}.typing i{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:b 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes b{50%{opacity:.2;transform:translateY(-2px)}}
-.composer{padding:14px 18px;border-top:1px solid var(--line);background:rgba(255,255,255,.02)}.composer-inner{display:flex;gap:9px;align-items:flex-end;max-width:900px;margin:0 auto}.input{flex:1;min-height:48px;max-height:150px;resize:vertical;border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.25);color:var(--text);padding:13px;outline:none}.input:focus{border-color:rgba(124,92,255,.65);box-shadow:0 0 0 3px rgba(124,92,255,.10)}.send{height:48px;min-width:78px}
-.notice{max-width:900px;margin:0 auto 8px;color:var(--muted);font-size:10px;line-height:1.4;text-align:center}.notice b{color:#b8c3dd}
-@media(max-width:700px){.shell{padding:0}.app{height:100vh;min-height:100vh;border-radius:0;border-left:0;border-right:0}.bubble-wrap{max-width:86%}.header{padding:14px}.chat{padding:15px}.composer{padding:12px}.header-actions .btn.secondary{display:none}}
+button{border:0}
+button:disabled{opacity:.55;cursor:not-allowed}
+::selection{background:rgba(124,92,255,.3);color:#fff}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(124,92,255,.28);border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:rgba(124,92,255,.46);background-clip:padding-box}
+
+#fx{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.fx-orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.22;animation:float 14s ease-in-out infinite}
+.fx-orb.a{width:280px;height:280px;left:-80px;top:8%;background:var(--accent)}
+.fx-orb.b{width:240px;height:240px;right:-60px;top:26%;background:var(--accent2);animation-delay:-4s}
+.fx-orb.c{width:230px;height:230px;left:50%;bottom:-130px;background:var(--accent3);animation-delay:-8s}
+#grid{position:absolute;inset:-20%;opacity:.16;background-image:linear-gradient(rgba(124,92,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(25,211,255,.10) 1px,transparent 1px);background-size:56px 56px;transform:perspective(700px) rotateX(62deg) translateY(20%)}
+@keyframes float{50%{transform:translate(36px,-26px) scale(1.08)}}
+
+.app{width:100%;height:100%;display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);position:relative}
+.sidebar{display:flex;flex-direction:column;min-width:0;padding:16px;border-right:1px solid var(--line);background:rgba(5,9,18,.72);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.brand{display:flex;align-items:center;gap:11px;padding:8px 8px 16px}
+.logo{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#4c8dff 55%,var(--accent2));font-weight:900;box-shadow:0 0 30px rgba(124,92,255,.4)}
+.brand-copy{min-width:0}.brand-copy strong{display:block;font-size:16px;letter-spacing:-.02em}.brand-copy span{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+.new-chat{width:100%;display:flex;align-items:center;gap:9px;padding:11px 12px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4c8dff 55%,var(--accent2));color:#fff;font-weight:800;box-shadow:0 12px 25px rgba(124,92,255,.24);cursor:pointer}
+.new-chat:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.side-title{margin:18px 9px 8px;color:var(--muted-2);font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.conversations{min-height:0;flex:1;overflow:auto;display:grid;align-content:start;gap:5px;padding-right:2px}
+.conv{display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;border-radius:11px;color:var(--muted);background:transparent;text-align:left;cursor:pointer;transition:.18s}
+.conv:hover{background:var(--surface);color:var(--text)}
+.conv.active{background:rgba(124,92,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(124,92,255,.16)}
+.conv-icon{width:24px;height:24px;display:grid;place-items:center;flex:none;font-size:12px;border-radius:7px;background:rgba(255,255,255,.04)}
+.conv span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;font-weight:600}
+.side-bottom{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:grid;gap:6px}
+.side-action{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:11px;color:var(--muted);background:transparent;cursor:pointer}
+.side-action:hover{background:var(--surface);color:#fff}
+.side-action-left{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700}
+.model-pill{display:inline-flex;align-items:center;gap:6px;font-size:9px;color:#b8c4db;padding:4px 7px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.03)}
+.model-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px rgba(52,211,153,.7)}
+
+.main{min-width:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.topbar{height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;border-bottom:1px solid var(--line);background:rgba(6,10,19,.56);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.top-title{min-width:0}.top-title strong{display:block;font-size:13px;font-weight:800}.top-title span{display:block;margin-top:2px;color:var(--muted);font-size:9.5px}
+.top-actions{display:flex;align-items:center;gap:7px}.icon-btn,.ghost-btn{display:inline-grid;place-items:center;border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--muted);cursor:pointer;transition:.18s}.icon-btn{width:36px;height:36px;border-radius:10px}.ghost-btn{height:36px;padding:0 10px;border-radius:10px;font-size:11px;font-weight:700}.icon-btn:hover,.ghost-btn:hover{color:#fff;background:var(--surface-hover);border-color:var(--line-strong)}
+
+.chat{min-height:0;overflow:auto;padding:24px 18px 32px;scroll-behavior:smooth}
+.messages{width:min(var(--content),100%);margin:0 auto;display:grid;gap:20px}
+.welcome{min-height:calc(100vh - 250px);display:grid;place-items:center;text-align:center;padding:24px}.welcome-card{width:min(690px,100%);padding:36px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(19,27,47,.66),rgba(11,17,31,.48));box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.welcome-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid rgba(25,211,255,.2);border-radius:99px;background:rgba(25,211,255,.06);color:var(--accent2);font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.welcome-mark{width:64px;height:64px;margin:18px auto 12px;border-radius:19px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#4c8dff 55%,var(--accent2));font-size:27px;font-weight:900;box-shadow:0 0 42px rgba(124,92,255,.34)}
+.welcome h1{margin:0;font-size:34px;letter-spacing:-.04em}.welcome p{max-width:560px;margin:12px auto 0;color:var(--muted);font-size:13px;line-height:1.7}
+.suggestions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:22px}.suggestion{padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#bfc9dc;font-size:11px;font-weight:700;cursor:pointer}.suggestion:hover{background:var(--surface-hover);color:#fff;border-color:var(--line-strong)}
+.msg{display:flex;gap:11px;align-items:flex-start}.msg.user{justify-content:flex-end}.avatar{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;flex:none;font-size:11px;font-weight:900;background:rgba(124,92,255,.13);border:1px solid rgba(124,92,255,.12)}.msg.user .avatar{order:2;background:linear-gradient(135deg,var(--accent),#4c8dff);color:#fff;border-color:transparent}.bubble-wrap{max-width:min(82%,840px)}.msg.user .bubble-wrap{display:flex;flex-direction:column;align-items:flex-end}.meta{display:flex;align-items:center;gap:8px;color:var(--muted-2);font-size:9.5px;font-weight:800;margin:0 0 6px 3px}.msg.user .meta{margin-right:3px}.bubble{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.025));padding:14px 15px;line-height:1.68;font-size:13.5px;overflow-wrap:anywhere;box-shadow:0 8px 25px rgba(0,0,0,.10)}.msg.user .bubble{background:linear-gradient(135deg,rgba(124,92,255,.18),rgba(25,211,255,.07));border-color:rgba(124,92,255,.24)}
+.bubble p{margin:0 0 10px}.bubble p:last-child{margin-bottom:0}.bubble h1,.bubble h2,.bubble h3,.bubble h4,.bubble h5,.bubble h6{margin:0 0 10px;line-height:1.25;letter-spacing:-.02em}.bubble h1{font-size:22px}.bubble h2{font-size:19px}.bubble h3{font-size:17px}.bubble h4,.bubble h5,.bubble h6{font-size:15px}.bubble ul,.bubble ol{margin:7px 0 10px;padding-left:22px}.bubble li{margin:4px 0}.bubble blockquote{margin:8px 0;padding:8px 12px;border-left:3px solid var(--accent);background:rgba(124,92,255,.07);color:#b9c3d8;border-radius:0 8px 8px 0}.bubble hr{border:0;border-top:1px solid var(--line);margin:13px 0}.bubble a{color:var(--accent2);text-decoration:none}.bubble a:hover{text-decoration:underline}.bubble strong{font-weight:850}.bubble em{font-style:italic}.bubble del{opacity:.8;text-decoration:line-through}.inline-code{padding:2px 6px;border-radius:6px;background:rgba(124,92,255,.11);border:1px solid rgba(124,92,255,.18);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;color:#cbc4ff}.code-block{margin:11px 0 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#050811}.code-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 9px;background:rgba(255,255,255,.035);border-bottom:1px solid var(--line);color:var(--muted);font:700 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase}.code-copy{padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:rgba(255,255,255,.04);color:var(--muted);font-size:9px;font-weight:800;cursor:pointer}.code-copy:hover{color:#fff;background:var(--surface-hover)}.code{margin:0;padding:12px;overflow:auto;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#dfe7f5;white-space:pre}
+
+.typing-bubble{display:inline-flex;align-items:center;gap:5px}.typing-bubble i{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:typing 1s infinite}.typing-bubble i:nth-child(2){animation-delay:.14s}.typing-bubble i:nth-child(3){animation-delay:.28s}@keyframes typing{50%{opacity:.25;transform:translateY(-2px)}}
+
+.composer-wrap{padding:12px 18px 15px;border-top:1px solid var(--line);background:rgba(5,9,17,.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.composer{width:min(var(--content),100%);margin:0 auto}.composer-tools{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 7px}.composer-hint{font-size:9px;color:var(--muted-2)}.composer-actions{display:flex;align-items:center;gap:6px}.small-btn{padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.025);color:var(--muted);font-size:9px;font-weight:800;cursor:pointer}.small-btn:hover{color:#fff;background:var(--surface)}.composer-box{display:flex;align-items:flex-end;gap:8px;padding:8px;border:1px solid var(--line-strong);border-radius:17px;background:rgba(8,13,24,.88);box-shadow:0 10px 35px rgba(0,0,0,.18)}.prompt{flex:1;min-width:0;min-height:42px;max-height:180px;resize:none;overflow:auto;border:0;outline:0;background:transparent;color:var(--text);padding:8px 7px;font-size:13.5px;line-height:1.5}.prompt::placeholder{color:#596780}.send{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4c8dff 55%,var(--accent2));color:#fff;display:grid;place-items:center;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(124,92,255,.26)}.send:hover{filter:brightness(1.08)}
+
+.overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(1,3,8,.66);backdrop-filter:blur(10px);z-index:20}.overlay.open{display:grid}.dialog{width:min(520px,calc(100% - 24px));border:1px solid var(--line-strong);border-radius:20px;background:linear-gradient(180deg,#111a30,#0b1220);box-shadow:var(--shadow);padding:20px}.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.dialog-head strong{font-size:15px}.close{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer}.close:hover{color:#fff}.setting{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}.setting:last-child{border-bottom:0}.setting-copy strong{display:block;font-size:12px}.setting-copy span{display:block;margin-top:3px;color:var(--muted);font-size:10px}.setting select{border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.04);color:var(--text);padding:8px 9px;font-size:10px;outline:0}.setting input[type="checkbox"]{accent-color:var(--accent);width:16px;height:16px}
+
+.toast{position:fixed;left:50%;bottom:88px;transform:translate(-50%,12px);opacity:0;pointer-events:none;z-index:40;padding:9px 12px;border:1px solid var(--line-strong);border-radius:10px;background:#101a2e;color:#e6edf9;font-size:10px;font-weight:800;transition:.2s;box-shadow:var(--shadow)}.toast.show{opacity:1;transform:translate(-50%,0)}
+.mobile-sidebar-btn{display:none}
+
+@media(max-width:900px){
+  :root{--sidebar:220px}
+  .bubble-wrap{max-width:86%}
+}
+@media(max-width:720px){
+  body{overflow:hidden}
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;inset:0 auto 0 0;width:min(88vw,280px);z-index:25;transform:translateX(-102%);transition:.24s;box-shadow:30px 0 70px rgba(0,0,0,.34)}
+  .sidebar.open{transform:none}
+  .mobile-sidebar-btn{display:inline-grid}
+  .topbar{padding:0 12px;height:58px}
+  .top-title span{display:none}
+  .top-actions .desktop-only{display:none}
+  .chat{padding:16px 10px 24px}.composer-wrap{padding:10px}.welcome{min-height:calc(100vh - 190px);padding:10px}.welcome-card{padding:24px}.welcome h1{font-size:27px}.bubble{font-size:13px;padding:12px}.composer-hint{display:none}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<div id="bg"></div><div id="grid"></div>
-<div class="shell">
-  <div class="app">
-    <header class="header">
-      <div class="brand">
-        <div class="logo">V</div>
-        <div><h1>VEXO AI</h1><small>GLM-5.3 powered assistant</small></div>
+<div id="fx"><div id="grid"></div><div class="fx-orb a"></div><div class="fx-orb b"></div><div class="fx-orb c"></div></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo">V</div>
+      <div class="brand-copy"><strong>VEXO AI</strong><span>Ollama Cloud assistant</span></div>
+    </div>
+
+    <button class="new-chat" id="newChatBtn" type="button"><span>＋</span><span>New chat</span></button>
+
+    <div class="side-title">Conversations</div>
+    <div class="conversations" id="conversations"></div>
+
+    <div class="side-bottom">
+      <button class="side-action" id="settingsBtn" type="button">
+        <span class="side-action-left"><span>⚙</span><span>Settings</span></span>
+      </button>
+      <button class="side-action" id="exportBtn" type="button">
+        <span class="side-action-left"><span>⇩</span><span>Export chat</span></span>
+      </button>
+      <div class="side-action" aria-label="Current AI model">
+        <span class="side-action-left"><span class="model-dot"></span><span>Model</span></span>
+        <span class="model-pill">Gemma 4 · 31B</span>
       </div>
-      <div class="header-actions">
-        <button class="btn secondary" id="newChatBtn">New Chat</button>
-        <button class="btn" id="clearBtn">Clear</button>
+    </div>
+  </aside>
+
+  <section class="main">
+    <header class="topbar">
+      <div class="top-actions">
+        <button class="icon-btn mobile-sidebar-btn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
+      </div>
+      <div class="top-title">
+        <strong id="chatTitle">New conversation</strong>
+        <span>VEXO AI · Gemma 4 31B · Ollama Cloud</span>
+      </div>
+      <div class="top-actions">
+        <button class="ghost-btn desktop-only" id="renameBtn" type="button">Rename</button>
+        <button class="icon-btn" id="clearBtn" type="button" title="Clear conversation" aria-label="Clear conversation">⌫</button>
       </div>
     </header>
 
@@ -60,75 +170,279 @@ button{cursor:pointer}
       <div id="messages" class="messages"></div>
     </main>
 
-    <footer class="composer">
-      <div class="notice">Model: <b>GLM-5.3</b> · Hosted through Ollama Cloud.</div>
-      <div class="composer-inner">
-        <textarea id="prompt" class="input" rows="1" placeholder="Ask VEXO AI something..."></textarea>
-        <button id="sendBtn" class="btn primary send">Send</button>
+    <footer class="composer-wrap">
+      <div class="composer">
+        <div class="composer-tools">
+          <div class="composer-hint">Enter to send · Shift+Enter for a new line</div>
+          <div class="composer-actions">
+            <button class="small-btn" id="stopBtn" type="button" hidden>Stop</button>
+            <button class="small-btn" id="regenBtn" type="button">Regenerate</button>
+          </div>
+        </div>
+        <div class="composer-box">
+          <textarea id="prompt" class="prompt" rows="1" placeholder="Message VEXO AI..."></textarea>
+          <button id="sendBtn" class="send" type="button" aria-label="Send message">➤</button>
+        </div>
       </div>
     </footer>
+  </section>
+</div>
+
+<div class="overlay" id="settingsOverlay">
+  <div class="dialog">
+    <div class="dialog-head"><strong>VEXO AI Settings</strong><button class="close" id="closeSettings" type="button">×</button></div>
+    <div class="setting"><div class="setting-copy"><strong>Accent color</strong><span>Change the VEXO interface accent.</span></div><select id="accentSelect"><option value="#7c5cff">Violet</option><option value="#3b82f6">Blue</option><option value="#06b6d4">Cyan</option><option value="#ec4899">Pink</option><option value="#10b981">Emerald</option></select></div>
+    <div class="setting"><div class="setting-copy"><strong>Animations</strong><span>Enable background and interface motion.</span></div><input id="motionToggle" type="checkbox" checked></div>
+    <div class="setting"><div class="setting-copy"><strong>Compact messages</strong><span>Reduce spacing inside the conversation.</span></div><input id="compactToggle" type="checkbox"></div>
   </div>
 </div>
+<div class="toast" id="toast"></div>
+
 <script>
 const API_URL = "https://jxxjvwemjvhrozuaihso.supabase.co/functions/v1/vexo-ai";
-const MODEL = "glm-5.3";
-const STORAGE_KEY = "vexo-ai-history-v1";
-let history = [];
+const MODEL = "gemma4:31b";
+const STORAGE_KEY = "vexo-ai-modern-state-v2";
 
 const $ = id => document.getElementById(id);
-function esc(v){return String(v ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(history.slice(-30)))}catch(e){}}
-function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");if(Array.isArray(x))history=x}catch(e){history=[]}}
-function copyText(text){navigator.clipboard?.writeText(text).catch(()=>{});}
-function renderText(text){
-  const safe=esc(text);
-  const parts=safe.split(/(```[\s\S]*?```)/g);
-  return parts.map(part=>{
-    if(part.startsWith("```")&&part.endsWith("```")){
-      const inner=part.slice(3,-3).replace(/^\w+\n/,"");
-      return `<div class="code">${inner}</div><button class="btn copy" data-copy="${encodeURIComponent(inner)}">Copy code</button>`;
-    }
-    return part;
-  }).join("");
+const state = {
+  chats: [],
+  activeId: null,
+  busy: false,
+  controller: null,
+  settings: {
+    accent: "#7c5cff",
+    motion: true,
+    compact: false
+  }
+};
+
+function uid(){
+  return crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
-function render(){
+function esc(v=""){
+  return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+function toast(message){
+  const el=$("toast");
+  el.textContent=message;
+  el.classList.add("show");
+  clearTimeout(el._timer);
+  el._timer=setTimeout(()=>el.classList.remove("show"),2200);
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){console.warn("VEXO save state:",e)}
+}
+function loadState(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if(raw && Array.isArray(raw.chats)) Object.assign(state,raw);
+  }catch(e){console.warn("VEXO load state:",e)}
+  if(!state.chats.length) createChat(false);
+  if(!state.activeId) state.activeId=state.chats[0].id;
+  applySettings();
+}
+function currentChat(){return state.chats.find(c=>c.id===state.activeId)||null}
+function createChat(renderNow=true){
+  const chat={id:uid(),title:"New conversation",messages:[],createdAt:Date.now()};
+  state.chats.unshift(chat);
+  state.activeId=chat.id;
+  if(renderNow){saveState();renderAll();$("prompt").focus()}
+  return chat;
+}
+function deriveTitle(text){
+  const clean=String(text||"").replace(/\s+/g," ").trim();
+  return clean?clean.slice(0,42)+(clean.length>42?"…":""):"New conversation";
+}
+function renderSidebar(){
+  const box=$("conversations");
+  box.innerHTML=state.chats.map(c=>`<button class="conv ${c.id===state.activeId?"active":""}" type="button" data-chat="${esc(c.id)}"><span class="conv-icon">◌</span><span>${esc(c.title)}</span></button>`).join("");
+  box.querySelectorAll("[data-chat]").forEach(btn=>btn.addEventListener("click",()=>{
+    state.activeId=btn.dataset.chat;
+    saveState();
+    renderAll();
+    $("sidebar").classList.remove("open");
+  }));
+}
+function inlineMarkdown(line){
+  let s=esc(line);
+  s=s.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  s=s.replace(/`([^`\n]+)`/g,'<code class="inline-code">$1</code>');
+  s=s.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/__([^_\n]+)__/g,'<strong>$1</strong>');
+  s=s.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g,'<em>$1</em>');
+  s=s.replace(/(?<!_)_([^_\n]+)_(?!_)/g,'<em>$1</em>');
+  s=s.replace(/~~([^~\n]+)~~/g,'<del>$1</del>');
+  return s;
+}
+function renderMarkdown(text){
+  const lines=String(text??"").replace(/\r\n?/g,"\n").split("\n");
+  const out=[];let code=false,lang="",codeLines=[],list=null;
+  const closeList=()=>{if(list){out.push(`</${list}>`);list=null;}};
+  for(const raw of lines){
+    const line=raw.trimEnd();
+    const fence=line.match(/^\s*```\s*([\w+-]*)\s*$/);
+    if(fence){
+      if(code){
+        const body=esc(codeLines.join("\n"));
+        out.push(`<div class="code-block"><div class="code-head"><span>${esc(lang||"code")}</span><button class="code-copy" type="button" data-code="${encodeURIComponent(codeLines.join("\n"))}">Copy</button></div><pre class="code"><code>${body}</code></pre></div>`);
+        code=false;lang="";codeLines=[];
+      }else{closeList();code=true;lang=fence[1]||"";}
+      continue;
+    }
+    if(code){codeLines.push(raw);continue;}
+    if(!line.trim()){closeList();continue;}
+    const h=line.match(/^\s*(#{1,6})\s+(.+?)\s*#*\s*$/);
+    if(h){closeList();const n=h[1].length;out.push(`<h${n}>${inlineMarkdown(h[2])}</h${n}>`);continue;}
+    if(/^\s*(---+|\*\s*\*\s*\*|___+)\s*$/.test(line)){closeList();out.push("<hr>");continue;}
+    const q=line.match(/^\s*>\s?(.*)$/);if(q){closeList();out.push(`<blockquote>${inlineMarkdown(q[1])}</blockquote>`);continue;}
+    const ul=line.match(/^\s*[-*+]\s+(.+)$/), ol=line.match(/^\s*\d+[.)]\s+(.+)$/);
+    if(ul||ol){const type=ul?"ul":"ol";if(list!==type){closeList();list=type;out.push(`<${type}>`)}out.push(`<li>${inlineMarkdown((ul||ol)[1])}</li>`);continue;}
+    closeList();out.push(`<p>${inlineMarkdown(line)}</p>`);
+  }
+  if(code){const txt=codeLines.join("\n");out.push(`<div class="code-block"><div class="code-head"><span>${esc(lang||"code")}</span><button class="code-copy" type="button" data-code="${encodeURIComponent(txt)}">Copy</button></div><pre class="code"><code>${esc(txt)}</code></pre></div>`)}
+  closeList();
+  return out.join("");
+}
+function renderMessages(){
   const box=$("messages");
-  if(!history.length){
-    box.innerHTML=`<div class="empty"><div><strong>VEXO AI</strong><p>Ask a coding question, get an explanation, brainstorm an idea, or work through a problem.</p></div></div>`;
+  const chat=currentChat();
+  box.classList.toggle("compact",!!state.settings.compact);
+  if(!chat||!chat.messages.length){
+    box.innerHTML=`<div class="welcome"><div class="welcome-card"><span class="welcome-badge"><span class="model-dot"></span> Gemini-class reasoning model</span><div class="welcome-mark">V</div><h1>Meet VEXO AI</h1><p>Ask questions, write code, debug errors, explain concepts, brainstorm projects, or work through a problem with the VEXO assistant.</p><div class="suggestions"><button class="suggestion" type="button" data-suggest="Explain this JavaScript to me">Explain some code</button><button class="suggestion" type="button" data-suggest="Help me debug this error">Debug an error</button><button class="suggestion" type="button" data-suggest="Build me a simple HTML website">Build a website</button><button class="suggestion" type="button" data-suggest="Teach me something interesting">Teach me something</button></div></div></div>`;
+    box.querySelectorAll("[data-suggest]").forEach(b=>b.addEventListener("click",()=>{$("prompt").value=b.dataset.suggest;resizePrompt();$("prompt").focus()}));
     return;
   }
-  box.innerHTML=history.map((m,i)=>`<div class="msg ${m.role==='user'?'user':''}">
-    <div class="avatar">${m.role==='user'?'U':'V'}</div>
-    <div class="bubble-wrap"><div class="name">${m.role==='user'?'You':'VEXO AI'}</div><div class="bubble">${renderText(m.content)}</div></div>
-  </div>`).join("");
+  box.innerHTML=chat.messages.map((m,i)=>`
+    <article class="msg ${m.role==='user'?"user":"assistant"}">
+      <div class="avatar">${m.role==='user'?"U":"V"}</div>
+      <div class="bubble-wrap">
+        <div class="meta"><span>${m.role==='user'?"You":"VEXO AI"}</span><span>·</span><span>${new Date(m.time||Date.now()).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</span></div>
+        <div class="bubble">${m.role==='user'?`<p>${esc(m.content).replace(/\n/g,"<br>")}</p>`:renderMarkdown(m.content)}</div>
+      </div>
+    </article>`).join("");
+  box.querySelectorAll("[data-code]").forEach(btn=>btn.addEventListener("click",()=>{
+    const text=decodeURIComponent(btn.dataset.code||"");
+    navigator.clipboard?.writeText(text).catch(()=>{});
+    btn.textContent="Copied";
+    setTimeout(()=>btn.textContent="Copy",900);
+  }));
+  $("chatTitle").textContent=chat.title;
   $("chat").scrollTop=$("chat").scrollHeight;
-  document.querySelectorAll("[data-copy]").forEach(btn=>btn.addEventListener("click",()=>{copyText(decodeURIComponent(btn.dataset.copy));btn.textContent="Copied";setTimeout(()=>btn.textContent="Copy code",900)}));
 }
-function add(role,content){history.push({role,content});save();render();}
-function showTyping(){const box=$("messages");box.insertAdjacentHTML("beforeend",`<div id="typing" class="msg"><div class="avatar">V</div><div class="bubble-wrap"><div class="name">VEXO AI</div><div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div></div>`);$("chat").scrollTop=$("chat").scrollHeight;}
-function removeTyping(){$("typing")?.remove()}
+function renderAll(){renderSidebar();renderMessages();$("chatTitle").textContent=currentChat()?.title||"New conversation"}
+function addMessage(role,content){
+  const chat=currentChat()||createChat(false);
+  chat.messages.push({role,content,time:Date.now()});
+  if(role==='user' && chat.title==='New conversation') chat.title=deriveTitle(content);
+  saveState();renderAll();
+}
+function setBusy(on){
+  state.busy=on;$("sendBtn").disabled=on;$("prompt").disabled=on;$("stopBtn").hidden=!on;
+}
+function showTyping(){
+  const box=$("messages");
+  box.insertAdjacentHTML("beforeend",`<article class="msg assistant" id="typingMsg"><div class="avatar">V</div><div class="bubble-wrap"><div class="meta"><span>VEXO AI</span><span>·</span><span>thinking</span></div><div class="bubble"><span class="typing-bubble"><i></i><i></i><i></i></span></div></div></article>`);
+  $("chat").scrollTop=$("chat").scrollHeight;
+}
+function removeTyping(){$("typingMsg")?.remove()}
+function resizePrompt(){const el=$("prompt");el.style.height="auto";el.style.height=Math.min(el.scrollHeight,180)+"px"}
 async function ask(){
+  if(state.busy)return;
   const input=$("prompt");const text=input.value.trim();if(!text)return;
-  input.value="";input.style.height="48px";add("user",text);showTyping();
-  $("sendBtn").disabled=true;
+  input.value="";resizePrompt();
+  addMessage("user",text);showTyping();setBusy(true);
+  const chat=currentChat();
+  const payloadMessages=chat.messages.filter(m=>m.role==='user'||m.role==='assistant').slice(-20).map(m=>({role:m.role,content:m.content}));
+  state.controller=new AbortController();
   try{
-    const response=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:MODEL,messages:history.filter(x=>x.role==='user'||x.role==='assistant').slice(-20)})});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(data?.error||`Request failed (${response.status})`);
-    removeTyping();add("assistant",String(data?.message?.content||data?.response||"No response was returned."));
+    const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:MODEL,messages:payloadMessages}),signal:state.controller.signal});
+    const data=await res.json().catch(()=>({}));
+    removeTyping();
+    if(!res.ok)throw new Error(data?.error||`Request failed (${res.status})`);
+    addMessage("assistant",String(data?.message?.content||data?.response||"No response was returned."));
   }catch(err){
-    removeTyping();add("assistant",`I couldn't reach the VEXO AI service.\n\n${err?.message||"Unknown error"}`);
-  }finally{$("sendBtn").disabled=false;input.focus()}
+    removeTyping();
+    if(err?.name==='AbortError'){toast("Generation stopped.");}
+    else addMessage("assistant",`I couldn't reach the VEXO AI service.\n\n${err?.message||"Unknown error"}`);
+  }finally{state.controller=null;setBusy(false);input.focus()}
 }
+function regenerate(){
+  if(state.busy)return;
+  const chat=currentChat();if(!chat?.messages?.length)return;
+  const lastAssistant=chat.messages.findLastIndex?.(m=>m.role==='assistant');
+  if(lastAssistant!==undefined && lastAssistant>=0) chat.messages.splice(lastAssistant,1);
+  else if(chat.messages.at(-1)?.role==='assistant') chat.messages.pop();
+  const lastUser=chat.messages.findLast?.(m=>m.role==='user') || [...chat.messages].reverse().find(m=>m.role==='user');
+  if(!lastUser)return;
+  saveState();renderAll();
+  $("prompt").value="";
+  askFromExisting();
+}
+async function askFromExisting(){
+  if(state.busy)return;
+  showTyping();setBusy(true);
+  const chat=currentChat();
+  const payloadMessages=chat.messages.filter(m=>m.role==='user'||m.role==='assistant').slice(-20).map(m=>({role:m.role,content:m.content}));
+  state.controller=new AbortController();
+  try{
+    const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:MODEL,messages:payloadMessages}),signal:state.controller.signal});
+    const data=await res.json().catch(()=>({}));removeTyping();
+    if(!res.ok)throw new Error(data?.error||`Request failed (${res.status})`);
+    addMessage("assistant",String(data?.message?.content||data?.response||"No response was returned."));
+  }catch(err){removeTyping();if(err?.name!=='AbortError')addMessage("assistant",`I couldn't reach the VEXO AI service.\n\n${err?.message||"Unknown error"}`)}
+  finally{state.controller=null;setBusy(false);$("prompt").focus()}
+}
+function clearChat(){
+  const chat=currentChat();if(!chat)return;
+  chat.messages=[];saveState();renderAll();toast("Conversation cleared.");
+}
+function renameChat(){
+  const chat=currentChat();if(!chat)return;
+  const next=prompt("Rename conversation:",chat.title);
+  if(next===null)return;
+  const name=next.trim().replace(/\s+/g," ");if(!name)return;
+  chat.title=name.slice(0,60);saveState();renderAll();toast("Conversation renamed.");
+}
+function exportChat(){
+  const chat=currentChat();if(!chat)return;
+  const text=[`VEXO AI — ${chat.title}`,"",...chat.messages.map(m=>`${m.role==='user'?"YOU":"VEXO AI"}\n${m.content}\n`)].join("\n");
+  const blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`vexo-ai-${Date.now()}.txt`;a.click();URL.revokeObjectURL(url);toast("Chat exported.");
+}
+function applySettings(){
+  document.documentElement.style.setProperty("--accent",state.settings.accent||"#7c5cff");
+  document.body.classList.toggle("reduce-motion",!state.settings.motion);
+  document.documentElement.style.setProperty("--surface-compact",state.settings.compact?"1":"0");
+  $("accentSelect").value=state.settings.accent||"#7c5cff";
+  $("motionToggle").checked=state.settings.motion!==false;
+  $("compactToggle").checked=!!state.settings.compact;
+}
+function openSettings(){applySettings();$("settingsOverlay").classList.add("open")}
+function closeSettings(){$("settingsOverlay").classList.remove("open")}
+
 $("sendBtn").addEventListener("click",ask);
-$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask()}});
-$("prompt").addEventListener("input",e=>{e.target.style.height="48px";e.target.style.height=Math.min(e.target.scrollHeight,150)+"px"});
-$("clearBtn").addEventListener("click",()=>{history=[];save();render();});
-$("newChatBtn").addEventListener("click",()=>{history=[];save();render();$("prompt").focus()});
+$("prompt").addEventListener("keydown",e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask()}});
+$("prompt").addEventListener("input",resizePrompt);
+$("newChatBtn").addEventListener("click",()=>createChat(true));
+$("clearBtn").addEventListener("click",clearChat);
+$("renameBtn").addEventListener("click",renameChat);
+$("exportBtn").addEventListener("click",exportChat);
+$("settingsBtn").addEventListener("click",openSettings);
+$("closeSettings").addEventListener("click",closeSettings);
+$("settingsOverlay").addEventListener("click",e=>{if(e.target===$("settingsOverlay"))closeSettings()});
+$("accentSelect").addEventListener("change",e=>{state.settings.accent=e.target.value;saveState();applySettings()});
+$("motionToggle").addEventListener("change",e=>{state.settings.motion=e.target.checked;saveState();applySettings()});
+$("compactToggle").addEventListener("change",e=>{state.settings.compact=e.target.checked;saveState();renderMessages();applySettings()});
+$("stopBtn").addEventListener("click",()=>state.controller?.abort());
+$("regenBtn").addEventListener("click",regenerate);
+$("menuBtn").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
+
+loadState();renderAll();resizePrompt();
 window.addEventListener("message",event=>{
-  if(event.data?.type==="VEXO_THEME"&&event.data?.accent)document.documentElement.style.setProperty("--accent",String(event.data.accent));
+  if(event.data?.type==='VEXO_THEME' && event.data?.accent){
+    state.settings.accent=String(event.data.accent);applySettings();saveState();
+  }
 });
-load();render();
 </script>
 </body>
 </html>
