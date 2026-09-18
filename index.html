@@ -98,7 +98,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 .typing-bubble{display:inline-flex;align-items:center;gap:5px}.typing-bubble i{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:typing 1s infinite}.typing-bubble i:nth-child(2){animation-delay:.14s}.typing-bubble i:nth-child(3){animation-delay:.28s}@keyframes typing{50%{opacity:.25;transform:translateY(-2px)}}
 
-.composer-wrap{padding:12px 18px 15px;border-top:1px solid var(--line);background:rgba(5,9,17,.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.composer{width:min(var(--content),100%);margin:0 auto}.composer-tools{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 7px}.composer-hint{font-size:9px;color:var(--muted-2)}.composer-actions{display:flex;align-items:center;gap:6px}.small-btn{padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.025);color:var(--muted);font-size:9px;font-weight:800;cursor:pointer}.small-btn:hover{color:#fff;background:var(--surface)}.composer-box{display:flex;align-items:flex-end;gap:8px;padding:8px;border:1px solid var(--line-strong);border-radius:17px;background:rgba(8,13,24,.88);box-shadow:0 10px 35px rgba(0,0,0,.18)}.prompt{flex:1;min-width:0;min-height:42px;max-height:180px;resize:none;overflow-x:hidden;overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;border:0;outline:0;background:transparent;color:var(--text);padding:8px 7px;font-size:13.5px;line-height:1.5}.prompt::placeholder{color:#596780}.send{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4c8dff 55%,var(--accent2));color:#fff;display:grid;place-items:center;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(124,92,255,.26)}.send:hover{filter:brightness(1.08)}
+.composer-wrap{padding:12px 18px 15px;border-top:1px solid var(--line);background:rgba(5,9,17,.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.composer{width:min(var(--content),100%);margin:0 auto}.composer-tools{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 7px}.composer-hint{font-size:9px;color:var(--muted-2)}.composer-actions{display:flex;align-items:center;gap:6px}.small-btn{padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.025);color:var(--muted);font-size:9px;font-weight:800;cursor:pointer}.small-btn:hover{color:#fff;background:var(--surface)}.composer-box{display:flex;align-items:flex-end;gap:8px;padding:8px;border:1px solid var(--line-strong);border-radius:17px;background:rgba(8,13,24,.88);box-shadow:0 10px 35px rgba(0,0,0,.18)}.prompt{flex:1;min-width:0;min-height:42px;max-height:180px;resize:none;overflow-x:hidden;overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;border:0;outline:0;background:transparent;color:var(--text);padding:8px 7px;font-size:13.5px;line-height:1.5}.prompt::placeholder{color:#596780}.send{position:relative;z-index:5;width:42px;height:42px;flex:0 0 42px;border-radius:12px;border:0;background:linear-gradient(135deg,var(--accent),#4c8dff 55%,var(--accent2));color:#fff;display:grid;place-items:center;font-weight:900;cursor:pointer;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-shadow:0 8px 22px rgba(124,92,255,.26)}.send:hover{filter:brightness(1.08)}
 
 .overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(1,3,8,.66);backdrop-filter:blur(10px);z-index:20}.overlay.open{display:grid}.dialog{width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;scrollbar-gutter:stable;overscroll-behavior:contain;border-radius:20px;background:linear-gradient(180deg,#111a30,#0b1220);box-shadow:var(--shadow);padding:20px}.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.dialog-head strong{font-size:15px}.close{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer}.close:hover{color:#fff}.setting{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}.setting:last-child{border-bottom:0}.setting-copy strong{display:block;font-size:12px}.setting-copy span{display:block;margin-top:3px;color:var(--muted);font-size:10px}.setting select{border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.04);color:var(--text);padding:8px 9px;font-size:10px;outline:0}.setting input[type="checkbox"]{accent-color:var(--accent);width:16px;height:16px}
 
@@ -211,10 +211,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
             <button class="small-btn" id="regenBtn" type="button">Regenerate</button>
           </div>
         </div>
-        <div class="composer-box">
+        <form id="composerForm" class="composer-box">
           <textarea id="prompt" class="prompt" rows="1" placeholder="Message VEXO AI..."></textarea>
-          <button id="sendBtn" class="send" type="button" aria-label="Send message">➤</button>
-        </div>
+          <button id="sendBtn" class="send" type="submit" aria-label="Send message">➤</button>
+        </form>
       </div>
     </footer>
   </section>
@@ -267,7 +267,12 @@ function saveState(){
 function loadState(){
   try{
     const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-    if(raw && Array.isArray(raw.chats)) Object.assign(state,raw);
+    if(raw && Array.isArray(raw.chats)){
+      Object.assign(state,raw);
+      // Never restore an in-flight request from localStorage.
+      state.busy=false;
+      state.controller=null;
+    }
   }catch(e){console.warn("VEXO load state:",e)}
   if(!state.chats.length) createChat(false);
   if(!state.activeId) state.activeId=state.chats[0].id;
@@ -369,7 +374,11 @@ function addMessage(role,content){
   saveState();renderAll();
 }
 function setBusy(on){
-  state.busy=on;$("sendBtn").disabled=on;$("prompt").disabled=on;$("stopBtn").hidden=!on;
+  state.busy=!!on;
+  const send=$("sendBtn"), promptEl=$("prompt"), stop=$("stopBtn");
+  if(send) send.disabled=!!on;
+  if(promptEl) promptEl.disabled=!!on;
+  if(stop) stop.hidden=!on;
 }
 function showTyping(){
   const box=$("messages");
@@ -452,7 +461,7 @@ function applySettings(){
 function openSettings(){applySettings();$("settingsOverlay").classList.add("open")}
 function closeSettings(){$("settingsOverlay").classList.remove("open")}
 
-$("sendBtn").addEventListener("click",ask);
+$("composerForm").addEventListener("submit",e=>{e.preventDefault();ask();});
 $("prompt").addEventListener("keydown",e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask()}});
 $("prompt").addEventListener("input",resizePrompt);
 $("newChatBtn").addEventListener("click",()=>createChat(true));
